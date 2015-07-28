@@ -35,3 +35,11 @@ To derive scale factors one needs to follow the following procedure:
 
 (3) Compute the scale factors and make summary tables
     using the makeEfficiencyScaleFactors function.
+
+=====================================
+Output Results
+=====================================
+The output results will be summarized into an organized webpage located in the
+output directory that is provided as a parameter. The output includes fit plots,
+efficiency plots, and scale factor tables given in various formats (twiki, tex, txt).
+
