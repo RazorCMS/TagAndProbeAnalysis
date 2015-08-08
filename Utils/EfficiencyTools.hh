@@ -134,7 +134,7 @@ void MakeEfficiencyPlots(const TString conf,          // input file
   
   // mass region
   const Double_t massLo = 60;
-  const Double_t massHi = 130;
+  const Double_t massHi = 120;
   
   // bin edges for kinematic variables
   vector<Double_t> ptBinEdgesv;
@@ -167,8 +167,8 @@ void MakeEfficiencyPlots(const TString conf,          // input file
       ss >> opts[0] >> opts[1] >> opts[2] >> opts[3] >> opts[4] >> opts[5] >> opts[6];
     } else {
       ss >> edge;
-      if(state==1)      { ptBinEdgesv.push_back(edge); }
-      else if(state==2) { etaBinEdgesv.push_back(edge);  }
+      if(state==1)      { ptBinEdgesv.push_back(edge);  }
+      else if(state==2) { etaBinEdgesv.push_back(edge); }
       else if(state==3) { phiBinEdgesv.push_back(edge); }
       else if(state==4) { npvBinEdgesv.push_back(edge); }
       else if(state==5) { rhoBinEdgesv.push_back(edge); }
@@ -345,7 +345,8 @@ void MakeEfficiencyPlots(const TString conf,          // input file
   TFile *pufile = 0;
   if (doPUReweighting) {
     pufile = new TFile(pileupReweightFile.Data(), "READ");  
-    puWeights = (TH1F*)pufile->Get("puWeights");
+    //puWeights = (TH1F*)pufile->Get("puWeights");
+    puWeights = (TH1F*)pufile->Get("npv_rw");
     assert(puWeights);
   }
 
@@ -374,13 +375,13 @@ void MakeEfficiencyPlots(const TString conf,          // input file
     if((data->charge)*charge < 0) continue;
     if(data->mass < massLo)  continue;
     if(data->mass > massHi)  continue;
-
     
     mass = data->mass;
-    wgt  = 1;
+    wgt  = data->weight/abs(data->weight);
     if (doPUReweighting) {
-      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPU_0), 60.499));
-      wgt = puWeights->GetBinContent(npuxbin);
+      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPU_0), 60.499));
+      //wgt = puWeights->GetBinContent(npuxbin);
+      wgt*=puWeights->GetBinContent(data->NPV+1);
     }
     
     Int_t ipt=-1;
@@ -1236,10 +1237,10 @@ void generateHistTemplates(const TString infilename,
   for(UInt_t ientry=0; ientry< inputData->tree_->GetEntries(); ientry++) {
     inputData->tree_->GetEntry(ientry);
     
-    double weight = 1;
+    double weight = inputData->weight;
     if (puWeights) {      
-      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPU_0), 60.499));      
-      weight = puWeights->GetBinContent(npuxbin);
+      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPU_0), 60.499));      
+      weight*=puWeights->GetBinContent(inputData->NPV+1);
     }
 
     if((inputData->charge)*charge < 0) continue;
@@ -1615,7 +1616,8 @@ void performCount(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   passTree->SetBranchAddress("w",&w);
   for(UInt_t ientry=0; ientry<passTree->GetEntries(); ientry++) {
     passTree->GetEntry(ientry);
-    if(m<76 || m>106) continue;
+    //if(m<76 || m>106) continue;
+    if(m<60 || m>120) continue;
     npass+=w;
     ntotal+=w;
   }
@@ -1623,7 +1625,8 @@ void performCount(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   failTree->SetBranchAddress("w",&w);
   for(UInt_t ientry=0; ientry<failTree->GetEntries(); ientry++) {
     failTree->GetEntry(ientry);
-    if(m<76 || m>106) continue;
+    //if(m<76 || m>106) continue;
+    if(m<60 || m>120) continue;
     ntotal+=w;
   }
   resEff  = npass/ntotal;
@@ -1723,9 +1726,6 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
 		const TString name, const Double_t massLo, const Double_t massHi, const TString format, const Bool_t doAbsEta,
 		TCanvas *cpass, TCanvas *cfail)
 {
-
-//   if (ibin < 3) return;
-
 
   RooRealVar m("m","mass",massLo,massHi);
   m.setBins(10000);
@@ -1887,6 +1887,9 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   } else if(bkgfail==2) {
     bkgFail = new CErfExpo(m,kFALSE); 
     nflfail += 3; 
+    ((CErfExpo*)bkgFail)->alfa->setVal(66);
+    ((CErfExpo*)bkgFail)->beta->setVal(0.08);
+    ((CErfExpo*)bkgFail)->gamma->setVal(0.05);
   
   } else if(bkgfail==3) {
     bkgFail = new CDoubleExp(m,kFALSE);
@@ -1906,9 +1909,9 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   Double_t NsigMax     = doBinned ? histPass.Integral()+histFail.Integral() : passTree->GetEntries()+failTree->GetEntries();
   Double_t NbkgFailMax = doBinned ? histFail.Integral() : failTree->GetEntries();
   Double_t NbkgPassMax = doBinned ? histPass.Integral() : passTree->GetEntries();
-  RooRealVar Nsig("Nsig","Signal Yield",0.80*NsigMax,0,NsigMax);
-  RooRealVar eff("eff","Efficiency",0.8,0,1.0);
-  RooRealVar NbkgPass("NbkgPass","Background count in PASS sample",50,0,NbkgPassMax);
+  RooRealVar Nsig("Nsig","Signal Yield",0.9*NsigMax,0,NsigMax);
+  RooRealVar eff("eff","Efficiency",0.9,0,1.0);
+  RooRealVar NbkgPass("NbkgPass","Background count in PASS sample",5,0,NbkgPassMax);
   if(bkgpass==0) NbkgPass.setVal(0);
   RooRealVar NbkgFail("NbkgFail","Background count in FAIL sample",0.4*NbkgFailMax,0.01,NbkgFailMax);  
   cout << "here2\n";
@@ -1919,6 +1922,7 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   RooExtendPdf *esignalPass=0, *ebackgroundPass=0, *esignalFail=0, *ebackgroundFail=0;
   //m.setRange("signalRange",85, 95);
   m.setRange("signalRange",76, 106);
+  //m.setRange("signalRange",60, 120);
     
   esignalPass     = new RooExtendPdf("esignalPass","esignalPass",*(sigPass->model),NsigPass,"signalRange");
   ebackgroundPass = new RooExtendPdf("ebackgroundPass","ebackgroundPass",(bkgpass>0) ? *(bkgPass->model) : *(sigPass->model),NbkgPass,"signalRange");
@@ -1935,14 +1939,15 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   totalPdf.addPdf(*modelFail,"Fail");
 
   //some custom massaging
-  ((CMCTemplateConvGaussian*)sigFail)->mean->setRange(-3,3);
+  //((CMCTemplateConvGaussian*)sigFail)->mean->setRange(-3,3);
 
   cout << "here4\n";
 
   RooFitResult *fitResult=0;
   fitResult = totalPdf.fitTo(*dataCombined,
 			     RooFit::Extended(),
-  			     RooFit::Strategy(2),
+  			     //RooFit::Strategy(2),
+			     RooFit::Strategy(1),
   			     //RooFit::Minos(RooArgSet(eff)),
   			     RooFit::Save());
 

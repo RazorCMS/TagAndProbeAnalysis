@@ -161,13 +161,13 @@ CErfExpo::CErfExpo(RooRealVar &m, const Bool_t pass)
   char vname[50];
   
   if(pass) {
-    sprintf(vname,"alfa%s",name);  alfa  = new RooRealVar(vname,vname,50,5,200);
-    sprintf(vname,"beta%s",name);  beta  = new RooRealVar(vname,vname,0.01,0,10);
-    sprintf(vname,"gamma%s",name); gamma = new RooRealVar(vname,vname,0.1,0,1);
+    sprintf(vname,"alfa%s",name);  alfa  = new RooRealVar(vname,vname,50,1,100);
+    sprintf(vname,"beta%s",name);  beta  = new RooRealVar(vname,vname,0.01,0,1.5);
+    sprintf(vname,"gamma%s",name); gamma = new RooRealVar(vname,vname,0.2,0,1);
   } else {
-    sprintf(vname,"alfa%s",name);  alfa  = new RooRealVar(vname,vname,50,5,200);
-    sprintf(vname,"beta%s",name);  beta  = new RooRealVar(vname,vname,0.01,0,10);
-    sprintf(vname,"gamma%s",name); gamma = new RooRealVar(vname,vname,0.1,0,1);
+    sprintf(vname,"alfa%s",name);  alfa  = new RooRealVar(vname,vname,50,1,200);
+    sprintf(vname,"beta%s",name);  beta  = new RooRealVar(vname,vname,0.01,0,0.5);
+    sprintf(vname,"gamma%s",name); gamma = new RooRealVar(vname,vname,0.2,0,1);
   }  
   
   sprintf(vname,"peak%s",name);  
