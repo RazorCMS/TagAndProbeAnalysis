@@ -57,6 +57,7 @@
 #include "RooFitResult.h"
 #include "RooExtendPdf.h"
 #include "RooWorkspace.h"
+#include "RooMsgService.h"
  
 
 //=== FUNCTION DECLARATIONS ======================================================================================
@@ -1802,7 +1803,6 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
     sigmaFail = new RooRealVar("sigmaFail","sigmaFail", 1, 0, 5);
   }
 
-
   if(sigpass==1) {
     sigPass = new CBreitWignerConvCrystalBall(m,kTRUE);
     nflpass += 4;
@@ -1880,17 +1880,21 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
     nflfail += 2;
   }
 
+  // reco to loose ID (electron)
+  //if(bkgfail==1 || ibin>=12) {
+  // muon
+  //if(bkgfail==1 || ibin>=8) { 
   if(bkgfail==1) { 
     bkgFail = new CExponential(m,kFALSE);
     nflfail += 1;
-  
   } else if(bkgfail==2) {
+    // reco to loose ID electron
+    //} else if(bkgfail==2 && !(ibin>=12)) {
+    // muon
+    //} else if(bkgfail==2 && !(ibin>=8)) {
+    cout << "right background model" << endl;
     bkgFail = new CErfExpo(m,kFALSE); 
-    nflfail += 3; 
-    ((CErfExpo*)bkgFail)->alfa->setVal(66);
-    ((CErfExpo*)bkgFail)->beta->setVal(0.08);
-    ((CErfExpo*)bkgFail)->gamma->setVal(0.05);
-  
+    nflfail += 3;
   } else if(bkgfail==3) {
     bkgFail = new CDoubleExp(m,kFALSE);
     nflfail += 3;
@@ -1904,16 +1908,19 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
 
   cout << "here1\n";
 
-
   // Define free parameters
   Double_t NsigMax     = doBinned ? histPass.Integral()+histFail.Integral() : passTree->GetEntries()+failTree->GetEntries();
   Double_t NbkgFailMax = doBinned ? histFail.Integral() : failTree->GetEntries();
   Double_t NbkgPassMax = doBinned ? histPass.Integral() : passTree->GetEntries();
+  // muon reco to tight
+  //if (ibin==12) {
+  //NsigMax = doBinned ? 1.2*(histPass.Integral()+histFail.Integral()) : 1.2*(passTree->GetEntries()+failTree->GetEntries());
+  //}
   RooRealVar Nsig("Nsig","Signal Yield",0.9*NsigMax,0,NsigMax);
-  RooRealVar eff("eff","Efficiency",0.9,0,1.0);
+  RooRealVar eff("eff","Efficiency",0.5,0,1.0);
   RooRealVar NbkgPass("NbkgPass","Background count in PASS sample",5,0,NbkgPassMax);
   if(bkgpass==0) NbkgPass.setVal(0);
-  RooRealVar NbkgFail("NbkgFail","Background count in FAIL sample",0.4*NbkgFailMax,0.01,NbkgFailMax);  
+  RooRealVar NbkgFail("NbkgFail","Background count in FAIL sample",0.6*NbkgFailMax,0,NbkgFailMax);
   cout << "here2\n";
 
   RooFormulaVar NsigPass("NsigPass","eff*Nsig",RooArgList(eff,Nsig));
@@ -1921,8 +1928,8 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   RooAddPdf *modelPass=0, *modelFail=0;
   RooExtendPdf *esignalPass=0, *ebackgroundPass=0, *esignalFail=0, *ebackgroundFail=0;
   //m.setRange("signalRange",85, 95);
-  m.setRange("signalRange",76, 106);
-  //m.setRange("signalRange",60, 120);
+  //m.setRange("signalRange",76, 106);
+  m.setRange("signalRange",60, 120);
     
   esignalPass     = new RooExtendPdf("esignalPass","esignalPass",*(sigPass->model),NsigPass,"signalRange");
   ebackgroundPass = new RooExtendPdf("ebackgroundPass","ebackgroundPass",(bkgpass>0) ? *(bkgPass->model) : *(sigPass->model),NbkgPass,"signalRange");
@@ -1939,9 +1946,53 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   totalPdf.addPdf(*modelFail,"Fail");
 
   //some custom massaging
-  //((CMCTemplateConvGaussian*)sigFail)->mean->setRange(-3,3);
+
+  // reco to ID
+  //if (ibin==9 || ibin==10) {
+  // reco to tight ID
+  //Nsig.setVal(9900.0);
+  //eff.setVal(0.8);
+  //((CErfExpo*)bkgFail)->alfa->setVal(170);
+  //((CErfExpo*)bkgFail)->beta->setVal(0.038);
+  //((CErfExpo*)bkgFail)->gamma->setVal(0.26);
+  // reco to loose ID
+  //Nsig.setVal(9000.0);
+  //eff.setVal(0.9);
+  //((CErfExpo*)bkgFail)->alfa->setVal(66);
+  //((CErfExpo*)bkgFail)->beta->setVal(0.15);
+  //((CErfExpo*)bkgFail)->gamma->setVal(0.01);
+  //}
+
+  // loose reco to ID
+  //if (ibin==4 || ibin==5 || ibin==6) {
+  //Nsig.setVal(400.0);
+  //}
+
+  //if (ibin==7) {
+  //  Nsig.setVal(600);
+  //  NbkgPass.setVal(10);
+  //  NbkgFail.setVal(10);
+  //  eff.setVal(0.95);
+  //  ((CExponential*)bkgFail)->t->setVal(-0.02);
+  //}
+  //
+  //if (ibin==9 || ibin==10) {
+  //  Nsig.setVal(8800);
+  //  NbkgPass.setVal(130);
+  //  NbkgFail.setVal(85);
+  //  eff.setVal(0.95);
+  //  ((CExponential*)bkgFail)->t->setVal(-0.02);
+  //}
+
+  //muon reco to tight
+  //if (ibin==3) {
+  //NbkgFail.setVal(200);
+  //eff.setVal(0.88);
+  //}
 
   cout << "here4\n";
+
+  RooMsgService::instance().setGlobalKillBelow(RooFit::WARNING) ;
 
   RooFitResult *fitResult=0;
   fitResult = totalPdf.fitTo(*dataCombined,
@@ -1955,6 +2006,9 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   // Refit w/o MINOS if MINOS errors are strange...
   if((fabs(eff.getErrorLo())<5e-5) || (eff.getErrorHi()<5e-5))
     fitResult = totalPdf.fitTo(*dataCombined, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
+
+  //reco to tight ID
+  //if (ibin==12) fitResult = totalPdf.fitTo(*dataCombined, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
   
   cout << "here5\n";
 
