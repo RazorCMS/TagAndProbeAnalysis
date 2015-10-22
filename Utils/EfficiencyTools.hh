@@ -345,7 +345,8 @@ void MakeEfficiencyPlots(const TString conf,          // input file
   TFile *pufile = 0;
   if (doPUReweighting) {
     pufile = new TFile(pileupReweightFile.Data(), "READ");  
-    puWeights = (TH1F*)pufile->Get("puWeights");
+    //puWeights = (TH1F*)pufile->Get("puWeights");
+    puWeights = (TH1F*)pufile->Get("NVtxReweight");
     assert(puWeights);
   }
 
@@ -379,7 +380,8 @@ void MakeEfficiencyPlots(const TString conf,          // input file
     mass = data->mass;
     wgt  = 1;
     if (doPUReweighting) {
-      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPU_0), 60.499));
+      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPU_0), 60.499));
+      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPV), 30.499));
       wgt = puWeights->GetBinContent(npuxbin);
     }
     
@@ -1238,7 +1240,8 @@ void generateHistTemplates(const TString infilename,
     
     double weight = 1;
     if (puWeights) {      
-      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPU_0), 60.499));      
+      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPU_0), 60.499));      
+      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPV), 30.499));
       weight = puWeights->GetBinContent(npuxbin);
     }
 
@@ -1908,7 +1911,7 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   Double_t NbkgPassMax = doBinned ? histPass.Integral() : passTree->GetEntries();
   RooRealVar Nsig("Nsig","Signal Yield",0.80*NsigMax,0,NsigMax);
   RooRealVar eff("eff","Efficiency",0.8,0,1.0);
-  RooRealVar NbkgPass("NbkgPass","Background count in PASS sample",50,0,NbkgPassMax);
+  RooRealVar NbkgPass("NbkgPass","Background count in PASS sample",0,0,NbkgPassMax);
   if(bkgpass==0) NbkgPass.setVal(0);
   RooRealVar NbkgFail("NbkgFail","Background count in FAIL sample",0.4*NbkgFailMax,0.01,NbkgFailMax);  
   cout << "here2\n";
