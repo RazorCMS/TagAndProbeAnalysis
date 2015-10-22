@@ -21,7 +21,12 @@ void makeEfficiencyScaleFactors(string DataFilename,
 				string MCFilename, 
 				string outputDir, 
 				string histName,
-				string Label)
+				string Label,
+				double PtLowRange = 5,
+				double PtHighRange = 500,
+				double EffLowRange = 0.8,
+				double EffHighRange = 1.15
+				)
 {
   
   string label = Label;
@@ -136,8 +141,8 @@ void makeEfficiencyScaleFactors(string DataFilename,
 	SFHighErr[iy-1]= 0;
       }
 
-      cout << "pt: " << iy << " : " << effMC[iy-1] << " " << effMCLowErr[iy-1] << " " << effMCHighErr[iy-1] << "\n";
-      cout << "pt: " << iy << " : " << effData[iy-1] << " " << effDataLowErr[iy-1] << " " << effDataHighErr[iy-1] << "\n";
+      cout << "pt: " << iy << " : " << ptbins[iy-1] << " : " << effMC[iy-1] << " " << effMCLowErr[iy-1] << " " << effMCHighErr[iy-1] << "\n";
+      cout << "pt: " << iy << " : " << ptbins[iy-1] << " : " << effData[iy-1] << " " << effDataLowErr[iy-1] << " " << effDataHighErr[iy-1] << "\n";
 
     }
 
@@ -172,8 +177,8 @@ void makeEfficiencyScaleFactors(string DataFilename,
     cout << "Bin : " << etaBinString << "\n";
     MCEffVsPt->SetTitle("");
     MCEffVsPt->Draw("ap");
-    MCEffVsPt->GetXaxis()->SetRangeUser(5,500);
-    MCEffVsPt->GetYaxis()->SetRangeUser(0.80,1.15);
+    MCEffVsPt->GetXaxis()->SetRangeUser(PtLowRange,PtHighRange);
+    MCEffVsPt->GetYaxis()->SetRangeUser(EffLowRange,EffHighRange);
     MCEffVsPt->GetXaxis()->SetLabelSize(0);
     MCEffVsPt->GetXaxis()->SetTitle("");
     MCEffVsPt->GetYaxis()->SetTitle("Efficiency");
@@ -211,7 +216,7 @@ void makeEfficiencyScaleFactors(string DataFilename,
 
     SFVsPt->SetTitle("");
     SFVsPt->Draw("ap");
-    SFVsPt->GetXaxis()->SetRangeUser(5,500);
+    SFVsPt->GetXaxis()->SetRangeUser(PtLowRange,PtHighRange);
     SFVsPt->GetYaxis()->SetTitle("Data/MC Scale Factor");
     SFVsPt->GetYaxis()->SetRangeUser(0.8,1.2);
     SFVsPt->GetYaxis()->SetTitleSize(0.085);
@@ -301,7 +306,7 @@ void makeEfficiencyScaleFactors(string DataFilename,
     MCEffVsEta->SetTitle("");
     MCEffVsEta->Draw("ap");
     MCEffVsEta->GetXaxis()->SetRangeUser(0,2.5);
-    MCEffVsEta->GetYaxis()->SetRangeUser(0.80,1.15);
+    MCEffVsEta->GetYaxis()->SetRangeUser(EffLowRange,EffHighRange);
     MCEffVsEta->GetXaxis()->SetLabelSize(0);
     MCEffVsEta->GetXaxis()->SetTitle("");
     MCEffVsEta->GetYaxis()->SetTitle("Efficiency");
@@ -351,6 +356,37 @@ void makeEfficiencyScaleFactors(string DataFilename,
   }
 
 
+
+  // //--------------------------------------------------------------------------------------------------------------
+  // // Produce 1D comparative plots vs NPV
+  // //==============================================================================================================   
+ 
+  // TCanvas *cv = new TCanvas("cv","cv", 800,600);
+  
+  // TLegend *legend = new TLegend(0.6,0.7,0.85,0.9);
+  // legend->SetTextSize(0.05);
+  // legend->SetBorderSize(0);
+  // legend->SetFillStyle(0);
+
+  // MCEffVsNVtx->SetTitle("");
+  // MCEffVsNVtx->Draw("AP");
+  // DataEffVsNVtx->Draw("psame");
+
+  // MCEffVsNVtx->GetXaxis()->SetRangeUser(0,30);
+  // MCEffVsNVtx->GetXaxis()->SetTitle("Number of Reconstructed Primary Vertices");
+  // MCEffVsNVtx->GetXaxis()->SetTitleOffset(1.0);
+  // MCEffVsNVtx->GetYaxis()->SetRangeUser(0.90,1.05);
+  // MCEffVsNVtx->GetYaxis()->SetTitle("Efficiency");
+  // MCEffVsNVtx->GetYaxis()->SetTitleOffset(1.4);
+
+  // DataEffVsNVtx->SetMarkerColor(kRed);
+  // DataEffVsNVtx->SetLineColor(kRed);
+
+  // legend->AddEntry(MCEffVsNVtx, "Simulation","LP");
+  // legend->AddEntry(DataEffVsNVtx, "Data","LP");
+  // legend->Draw();
+
+  // cv->SaveAs(Form("%s/EfficiencyComparison_vs_NVtx.gif",outputDir.c_str()));
 
 
   //--------------------------------------------------------------------------------------------------------------
