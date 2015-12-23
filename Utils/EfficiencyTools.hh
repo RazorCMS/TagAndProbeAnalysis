@@ -346,8 +346,8 @@ void MakeEfficiencyPlots(const TString conf,          // input file
   TFile *pufile = 0;
   if (doPUReweighting) {
     pufile = new TFile(pileupReweightFile.Data(), "READ");  
-    //puWeights = (TH1F*)pufile->Get("puWeights");
-    puWeights = (TH1F*)pufile->Get("NVtxReweight");
+    puWeights = (TH1F*)pufile->Get("PileupReweight");
+    //puWeights = (TH1F*)pufile->Get("NVtxReweight");
     assert(puWeights);
   }
 
@@ -377,11 +377,16 @@ void MakeEfficiencyPlots(const TString conf,          // input file
     if(data->mass < massLo)  continue;
     if(data->mass > massHi)  continue;
     
+    //make MET cut
+    if(data->met > 30) continue;
+
+    if(!(data->passTighterTag)) continue;
+
     mass = data->mass;
     wgt  = data->weight/abs(data->weight);
     if (doPUReweighting) {
-      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPU_0), 60.499));
-      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPV), 30.499));
+      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPU_0), 49.499));
+      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(data->NPV), 30.499));
       wgt = puWeights->GetBinContent(npuxbin);
     }
     
@@ -1240,8 +1245,8 @@ void generateHistTemplates(const TString infilename,
     
     double weight = inputData->weight;
     if (puWeights) {      
-      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPU_0), 60.499));      
-      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPV), 30.499));
+      Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPU_0), 49.499));      
+      //Int_t npuxbin = puWeights->GetXaxis()->FindFixBin(TMath::Min(double(inputData->NPV), 30.499));
       weight = puWeights->GetBinContent(npuxbin);
     }
 
@@ -1618,8 +1623,8 @@ void performCount(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   passTree->SetBranchAddress("w",&w);
   for(UInt_t ientry=0; ientry<passTree->GetEntries(); ientry++) {
     passTree->GetEntry(ientry);
-    //if(m<76 || m>106) continue;
-    if(m<60 || m>120) continue;
+    if(m<76 || m>106) continue;
+    //if(m<60 || m>120) continue;
     npass+=w;
     ntotal+=w;
   }
@@ -1905,6 +1910,9 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   } else if(bkgfail==5) {
     bkgFail = new CQuadraticExp(m,kFALSE);
     nflfail += 3;  
+  }  else if(bkgfail==6) {
+    bkgFail = new CQuadratic(m,kFALSE);
+    nflfail += 2;  
   } 
 
   cout << "here1\n";
@@ -1925,8 +1933,8 @@ void performFit(Double_t &resEff, Double_t &resErrl, Double_t &resErrh,
   RooAddPdf *modelPass=0, *modelFail=0;
   RooExtendPdf *esignalPass=0, *ebackgroundPass=0, *esignalFail=0, *ebackgroundFail=0;
   //m.setRange("signalRange",85, 95);
-  //m.setRange("signalRange",76, 106);
-  m.setRange("signalRange",60, 120);
+  m.setRange("signalRange",76, 106);
+  //m.setRange("signalRange",60, 120);
     
   esignalPass     = new RooExtendPdf("esignalPass","esignalPass",*(sigPass->model),NsigPass,"signalRange");
   ebackgroundPass = new RooExtendPdf("ebackgroundPass","ebackgroundPass",(bkgpass>0) ? *(bkgPass->model) : *(sigPass->model),NbkgPass,"signalRange");
