@@ -200,7 +200,7 @@ void makeEfficiencyScaleFactors(string DataFilename,
     legend->AddEntry(MCEffVsPt, "Simulation","LP");
     legend->AddEntry(DataEffVsPt, "Data","LP");
     legend->Draw();
-    pad1->SetLogx();
+    //pad1->SetLogx();
 
 
     cv->cd();
@@ -225,7 +225,7 @@ void makeEfficiencyScaleFactors(string DataFilename,
     SFVsPt->GetXaxis()->SetTitleSize(0.11);
     SFVsPt->GetXaxis()->SetLabelSize(0.10);
     SFVsPt->GetXaxis()->SetTitleOffset(0.8);
-    pad2->SetLogx();
+    //pad2->SetLogx();
 
     cv->SaveAs(Form("%s/EfficiencyComparison_EtaBin%d.gif",outputDir.c_str(),ix));
 
@@ -597,5 +597,196 @@ void makeEfficiencyScaleFactors(string DataFilename,
 
   outputFile->WriteTObject(h2_results_selection, h2_results_selection->GetName(), "WriteDelete");
   outputFile->Close();
+
+}
+
+
+
+void makeEfficiencyPlot(string filename,
+		    string outputDir, 
+		    string histName,
+		    string Label,
+		    double PtLowRange = 5,
+		    double PtHighRange = 500,
+		    double EffLowRange = 0.8,
+		    double EffHighRange = 1.15
+		    )
+{
+  
+  string label = Label;
+  if (Label != "") label = "_" + Label;
+
+  //--------------------------------------------------------------------------------------------------------------
+  // Settings 
+  //============================================================================================================== 
+  TFile datafile(filename.c_str());
+  
+  //--------------------------------------------------------------------------------------------------------------
+  // Main analysis code 
+  //==============================================================================================================   
+  
+  TH2F *hDataEff=0, *hDataErrl=0, *hDataErrh=0;  
+  hDataEff  = (TH2F*)datafile.Get("hEffEtaPt");
+  hDataErrl = (TH2F*)datafile.Get("hErrlEtaPt");
+  hDataErrh = (TH2F*)datafile.Get("hErrhEtaPt");
+  
+  //--------------------------------------------------------------------------------------------------------------
+  // Update root file histograms
+  //==============================================================================================================   
+  const Int_t nx = hDataEff->GetNbinsX();
+  const Int_t ny = hDataEff->GetNbinsY();
+
+  //Do Binning
+  Double_t *ptbins = new Double_t[ny+1];
+  Double_t *etabins = new Double_t[nx+1];
+  for(Int_t iy=1; iy<=ny; iy++) {
+    ptbins[iy-1] = fmax(fmin(hDataEff->GetYaxis()->GetBinLowEdge(iy),PtHighRange),PtLowRange);
+  }
+  for(Int_t ix=1; ix<=nx; ix++) {
+    etabins[ix-1]= hDataEff->GetXaxis()->GetBinLowEdge(ix);
+  }
+  ptbins[ny] = 60;
+  etabins[nx] = 2.5;
+    
+  cout << "ptbins : ";
+  for(Int_t i=0; i<ny+1;++i) {
+    cout << ptbins[i] << " ";
+  }
+  cout << endl;
+  cout << "etabins : ";
+  for(Int_t i=0; i<nx+1;++i) {
+    cout << etabins[i] << " ";
+  }
+  cout << endl;
+
+
+
+
+  //--------------------------------------------------------------------------------------------------------------
+  // Produce 1D comparative plots vs Pt
+  //==============================================================================================================   
+  for(Int_t ix=1; ix<=nx; ix++) {
+    string etaBinString = Form("%.1f #leq |#eta| #leq %.1f",  hDataEff->GetXaxis()->GetBinLowEdge(ix),  hDataEff->GetXaxis()->GetBinUpEdge(ix));
+    Double_t *ptbins = new Double_t[ny];
+    Double_t *ptbinsLowErr = new Double_t[ny];
+    Double_t *ptbinsHighErr = new Double_t[ny];
+    Double_t *effData = new Double_t[ny];
+    Double_t *effDataLowErr = new Double_t[ny];
+    Double_t *effDataHighErr = new Double_t[ny];
+    for(Int_t iy=1; iy<=ny; iy++) {
+      ptbins[iy-1] = hDataEff->GetYaxis()->GetBinCenter(iy);
+      ptbinsLowErr[iy-1] = hDataEff->GetYaxis()->GetBinCenter(iy) - hDataEff->GetYaxis()->GetBinLowEdge(iy);
+      ptbinsHighErr[iy-1] = hDataEff->GetYaxis()->GetBinUpEdge(iy) - hDataEff->GetYaxis()->GetBinCenter(iy) ;
+      effData[iy-1] = hDataEff->GetBinContent(ix,iy);
+      effDataLowErr[iy-1] = hDataErrl->GetBinContent(ix,iy);
+      effDataHighErr[iy-1] = min( hDataErrh->GetBinContent(ix,iy) , 1.0 - effData[iy-1] ); 
+      cout << "pt: " << iy << " : " << ptbins[iy-1] << " : " << effData[iy-1] << " " << effDataLowErr[iy-1] << " " << effDataHighErr[iy-1] << "\n";
+
+    }
+    TGraphAsymmErrors* DataEffVsPt = new TGraphAsymmErrors(ny+1, ptbins, effData, ptbinsLowErr, ptbinsHighErr, effDataLowErr, effDataHighErr);
+
+
+    TCanvas *cv = new TCanvas("cv","cv", 800,600);
+    // cv->SetHighLightColor(2);
+    // cv->SetFillColor(0);
+    // cv->SetBorderMode(0);
+    // cv->SetBorderSize(2);
+    // cv->SetLeftMargin(0.10);
+    // cv->SetRightMargin(0.3);
+    // cv->SetTopMargin(0.07);
+    // cv->SetBottomMargin(0.12);
+    // cv->SetFrameBorderMode(0);  
+
+    TLegend *legend = new TLegend(0.6,0.7,0.85,0.9);
+    legend->SetTextSize(0.05);
+    legend->SetBorderSize(0);
+    legend->SetFillStyle(0);
+    
+    cout << "Bin : " << etaBinString << "\n";
+    DataEffVsPt->SetTitle("");
+    DataEffVsPt->Draw("ap");
+    DataEffVsPt->GetXaxis()->SetRangeUser(PtLowRange,PtHighRange);
+    DataEffVsPt->GetYaxis()->SetRangeUser(EffLowRange,EffHighRange);
+    //DataEffVsPt->GetXaxis()->SetLabelSize(0);
+    DataEffVsPt->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+    DataEffVsPt->GetYaxis()->SetTitle("Efficiency");
+    DataEffVsPt->GetYaxis()->SetTitleSize(0.07);
+    DataEffVsPt->GetYaxis()->SetTitleOffset(0.85);  
+
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.060);
+    tex->SetTextFont(42);
+    tex->SetTextColor(kBlack);   
+    tex->DrawLatex(0.20, 0.83, etaBinString.c_str());
+ 
+    //cv->SetLogx();
+    cv->SaveAs(Form("%s/Efficiency_EtaBin%d.gif",outputDir.c_str(),ix));
+  }
+
+
+  //--------------------------------------------------------------------------------------------------------------
+  // Produce 1D comparative plots vs Eta
+  //==============================================================================================================   
+  for(Int_t iy=1; iy<=ny; iy++) {
+    string ptBinString = Form("%.0f #leq p_{T} #leq %.0f",  hDataEff->GetYaxis()->GetBinLowEdge(iy),  hDataEff->GetYaxis()->GetBinUpEdge(iy));
+    Double_t *etabins = new Double_t[nx];
+    Double_t *etabinsLowErr = new Double_t[nx];
+    Double_t *etabinsHighErr = new Double_t[nx];
+    Double_t *effData = new Double_t[nx];
+    Double_t *effDataLowErr = new Double_t[nx];
+    Double_t *effDataHighErr = new Double_t[nx];
+    for(Int_t ix=1; ix<=nx; ix++) {
+      etabins[ix-1] = hDataEff->GetXaxis()->GetBinCenter(ix);
+      etabinsLowErr[ix-1] = hDataEff->GetXaxis()->GetBinCenter(ix) - hDataEff->GetXaxis()->GetBinLowEdge(ix);
+      etabinsHighErr[ix-1] = hDataEff->GetXaxis()->GetBinUpEdge(ix) - hDataEff->GetXaxis()->GetBinCenter(ix) ;
+      effData[ix-1] = hDataEff->GetBinContent(ix,iy);
+      effDataLowErr[ix-1] = hDataErrl->GetBinContent(ix,iy);
+      effDataHighErr[ix-1] = min( hDataErrh->GetBinContent(ix,iy) , 1.0 - effData[ix-1] );
+      cout << "eta: " << ix << " : " << etabins[ix-1] << " " << effData[ix-1] << " " << effDataLowErr[ix-1] << " " << effDataHighErr[ix-1] << "\n";
+
+    }
+
+    TGraphAsymmErrors* DataEffVsEta = new TGraphAsymmErrors(nx+1, etabins, effData, etabinsLowErr, etabinsHighErr, effDataLowErr, effDataHighErr);
+
+    TCanvas *cv = new TCanvas("cv","cv", 800,600);
+    // cv->SetHighLightColor(2);
+    // cv->SetFillColor(0);
+    // cv->SetBorderMode(0);
+    // cv->SetBorderSize(2);
+    // cv->SetLeftMargin(0.10);
+    // cv->SetRightMargin(0.3);
+    // cv->SetTopMargin(0.07);
+    // cv->SetBottomMargin(0.12);
+    // cv->SetFrameBorderMode(0);  
+
+    TLegend *legend = new TLegend(0.6,0.7,0.85,0.9);
+    legend->SetTextSize(0.05);
+    legend->SetBorderSize(0);
+    legend->SetFillStyle(0);
+    
+    cout << "Bin : " << ptBinString << "\n";
+    DataEffVsEta->SetTitle("");
+    DataEffVsEta->Draw("ap");
+    DataEffVsEta->GetXaxis()->SetRangeUser(0,2.5);
+    DataEffVsEta->GetYaxis()->SetRangeUser(EffLowRange,EffHighRange);
+    DataEffVsEta->GetXaxis()->SetLabelSize(0);
+    DataEffVsEta->GetXaxis()->SetTitle("|#eta|");
+    DataEffVsEta->GetYaxis()->SetTitle("Efficiency");
+    DataEffVsEta->GetYaxis()->SetTitleSize(0.07);
+    DataEffVsEta->GetYaxis()->SetTitleOffset(0.65);
+
+    TLatex *tex = new TLatex();
+    tex->SetNDC();
+    tex->SetTextSize(0.060);
+    tex->SetTextFont(42);
+    tex->SetTextColor(kBlack);   
+    tex->DrawLatex(0.17, 0.80, ptBinString.c_str());
+ 
+    cv->SaveAs(Form("%s/Efficiency_PtBin%d.gif",outputDir.c_str(),iy));
+
+  }
+
+
 
 }
