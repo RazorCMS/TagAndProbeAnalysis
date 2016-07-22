@@ -373,14 +373,13 @@ void MakeEfficiencyPlots(const TString conf,          // input file
   for(UInt_t ientry=0; ientry < data->tree_->GetEntries(); ientry++) {
     data->tree_->GetEntry(ientry);
     
-    if((data->charge)*charge < 0) continue;
+    //if((data->charge)*charge < 0) continue;
     if(data->mass < massLo)  continue;
     if(data->mass > massHi)  continue;
     
     //make MET cut
-    if(data->met > 30) continue;
-
-    if(!(data->passTighterTag)) continue;
+    //if(data->met > 30) continue;
+    //if(!(data->passTighterTag)) continue;
 
     mass = data->mass;
     wgt  = data->weight/abs(data->weight);
