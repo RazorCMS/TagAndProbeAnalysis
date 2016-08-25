@@ -40,57 +40,43 @@ void computeMuonTriggerEfficiency( int option = 1) {
     // //*************************************
     // MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/MuonSingleMuHLTDenominatorTight.cfg",
     // 			0,0,0,0,
-    // 			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/MuTriggerIsoMu27ORMu50EffDenominatorTight/TagAndProbe_MuTriggerIsoMu20ORMu50EffDenominatorTight_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/MuTriggerIsoMu27ORMu50EffDenominatorTight/MC_25ns_2015Final_Golden/",
+    // 			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/MuTrigger/TagAndProbe_MuTrigger_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/MuTriggerMuCombinedEffDenominatorTight/MC/",
     // 			"png",
     // 			true,
     // 			0,
     // 			"",
-    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupReweight_Spring15MCTo2015Data.root");
+    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupReweight2016_ICHEP.root");
     
-    // //*************************************
-    // //Data : Do Fit
-    // //*************************************
-    // MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/MuonSingleMuHLTDenominatorTight.cfg",
-    // 			2,1,2,3,
-    // 			//2,2,2,2,
-    // 			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/MuTriggerIsoMu27ORMu50EffDenominatorTight/TagAndProbe_MuTriggerIsoMu20ORMu50EffDenominatorTight_SingleMuon_2015Final_GoodLumiGolden.root",
-    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/MuTriggerIsoMu27ORMu50EffDenominatorTight/Data/2015Final_Golden/",
-    // 			"png",
-    // 			true,
-    // 			0,
-    // 			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/MuTriggerIsoMu27ORMu50EffDenominatorTight/TagAndProbe_MuTriggerIsoMu20ORMu50EffDenominatorTight_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupReweight_Spring15MCTo2015Data.root");
+    //*************************************
+    //Data : Do Fit
+    //*************************************
+    MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/MuonSingleMuHLTDenominatorTight.cfg",
+    			//1,1,1,3,
+			2,1,2,2,
+    			//2,1,2,3,
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/MuTrigger/TagAndProbe_MuTrigger_SingleMuon_2016_PRv2_GoodLumi.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/MuTriggerMuCombinedEffDenominatorTight/Data+MC/",
+    			"png",
+    			true,
+    			0,
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/MuTrigger/TagAndProbe_MuTrigger_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight2016_ICHEP.root");
 
     //*************************************
     //Make Scale Factor Tables
     //*************************************
-    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/MuTriggerIsoMu27ORMu50EffDenominatorTight/Data/2015Final_Golden/eff.root",
-  			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/MuTriggerIsoMu27ORMu50EffDenominatorTight/MC_25ns_2015Final_Golden/eff.root",
-  			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/MuTriggerIsoMu27ORMu50EffDenominatorTight/Data/2015Final_Golden/",
-  			       "ScaleFactor_MuTriggerIsoMu27ORMu50EffDenominatorTight",
-  			       "MuTriggerIsoMu27ORMu50EffDenominatorTight_2015Final_Golden",
-  			       20,200,0.0,1.3
-  			       );
+    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/MuTriggerMuCombinedEffDenominatorTight/Data+MC/eff.root",
+    			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/MuTriggerMuCombinedEffDenominatorTight/MC/eff.root",
+    			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/MuTriggerMuCombinedEffDenominatorTight/Data+MC/",
+    			       "ScaleFactor_MuTriggerIsoMu27ORMu50EffDenominatorTight",
+    			       "MuTriggerIsoMu27ORMu50EffDenominatorTight_2016ICHEP_Golden",
+    			       20,200,0.0,1.3
+    			       );
     
   }
 
 
-  if (option == 2) {
 
-    //*************************************
-    //Monte Carlo
-    //*************************************
-    MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/MuonSingleMuHLTDenominatorTightFineBinning.cfg",
-    			0,0,0,0,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/MuTriggerIsoMu27ORMu50EffDenominatorTight/TagAndProbe_MuTriggerIsoMu20ORMu50EffDenominatorTight_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/MuTriggerIsoMu27ORMu50EffDenominatorTight/MC_25ns_2015D_Golden_FineBinning/",
-    			"png",
-    			true,
-    			0,
-    			"",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupReweight_Spring15MCTo2015Data.root");
-    
-  }
 
 }
