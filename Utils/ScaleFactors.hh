@@ -73,15 +73,17 @@ void makeEfficiencyScaleFactors(string DataFilename,
   //Do Binning
   Double_t *ptbins = new Double_t[ny+1];
   Double_t *etabins = new Double_t[nx+1];
-  for(Int_t iy=1; iy<=ny; iy++) {
+  for(Int_t iy=1; iy<=ny+1; iy++) {
       ptbins[iy-1] = hMCEff->GetYaxis()->GetBinLowEdge(iy);
   }
-  for(Int_t ix=1; ix<=nx; ix++) {
+  for(Int_t ix=1; ix<=nx+1; ix++) {
     etabins[ix-1]= hMCEff->GetXaxis()->GetBinLowEdge(ix);
   }
-  ptbins[ny] = 60;
-  etabins[nx] = 2.5;
-    
+
+  //use this to reduce the boundary of the last bin
+  //ptbins[ny] = 250;
+
+ 
   TH2F *h2_results_selection = new TH2F(histName.c_str(),"",ny,ptbins,nx,etabins);
   for(Int_t iy=0; iy<=ny+2; iy++) {
     for(Int_t ix=0; ix<=nx+2; ix++) {
