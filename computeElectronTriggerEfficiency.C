@@ -35,18 +35,18 @@ void computeElectronTriggerEfficiency( int option = 1) {
   //*************************************************************************************
   if (option == 1) {
 
-    // //*************************************
-    // //Monte Carlo
-    // //*************************************
-    // MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronSingleEleHLTDenominatorTight.cfg",
-    // 			0,0,0,0,
-    // 			"/afs/cern.ch/user/s/sixie/eos2/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/EleTrigger/TagAndProbe_EleTrigger_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/EleTriggerEleCombinedEffDenominatorTight/MC/",
-    // 			"png",
-    // 			true,
-    // 			0,
-    // 			"",
-    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupReweight2016_ICHEP.root");
+    //*************************************
+    //Monte Carlo
+    //*************************************
+    MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronSingleEleHLTDenominatorTight.cfg",
+    			0,0,0,0,
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/EleTriggerEleCombinedExtEffDenominatorTight/TagAndProbe_EleTriggerEleCombinedExtEffDenominatorTight_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/EleTriggerEleCombinedEffDenominatorTight/MC_2016_Rereco/",
+    			"png",
+    			true,
+    			0,
+    			"",
+    			"/afs/cern.ch/user/s/sixie/CMSSW_run2/src/RazorAnalyzer/data/PileupWeights/PileupReweight_2016_36p2ifb.root");
     
     //*************************************
     //Data : Do Fit
@@ -55,22 +55,22 @@ void computeElectronTriggerEfficiency( int option = 1) {
 			2,1,1,3,
     			//2,1,2,3,
     			//2,2,2,2,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/EleTrigger/TagAndProbe_EleTrigger_SingleElectron_2016_PRv2_GoodLumi.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/EleTriggerEleCombinedEffDenominatorTight/Data+MC/",
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/EleTriggerEleCombinedExtEffDenominatorTight/TagAndProbe_EleTriggerEleCombinedExtEffDenominatorTight_SingleElectron_2016G_PRv1_GoodLumiGolden_SUSYUnblind.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/EleTriggerEleCombinedEffDenominatorTight/Data_2016_Rereco/",
     			"png",
     			true,
     			0,
-    			"/afs/cern.ch/user/s/sixie/eos/cms//store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/EleTrigger/TagAndProbe_EleTrigger_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight2016_ICHEP.root");
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/EleTriggerEleCombinedExtEffDenominatorTight/TagAndProbe_EleTriggerEleCombinedExtEffDenominatorTight_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    			"/afs/cern.ch/user/s/sixie/CMSSW_run2/src/RazorAnalyzer/data/PileupWeights/PileupReweight_2016_36p2ifb.root");
 
     //*************************************
     //Make Scale Factor Tables
     //*************************************
-    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/EleTriggerEleCombinedEffDenominatorTight/Data+MC/eff.root",
-    			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/EleTriggerEleCombinedEffDenominatorTight/MC/eff.root",
-    			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/EleTriggerEleCombinedEffDenominatorTight/Data+MC/",
+    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/EleTriggerEleCombinedEffDenominatorTight/Data_2016_Rereco/eff.root",
+    			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/EleTriggerEleCombinedEffDenominatorTight/MC_2016_Rereco/eff.root",
+    			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/EleTriggerEleCombinedEffDenominatorTight/Data_2016_Rereco/",
     			       "ScaleFactor_EleTriggerEleCombinedEffDenominatorTight",
-    			       "EleTriggerEleCombinedEffDenominatorTight_2016ICHEP_Golden",
+    			       "EleTriggerEleCombinedEffDenominatorTight_2016_Rereco_Golden",
     			       25,200, 0, 1.3
     			       );
     

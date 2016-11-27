@@ -40,13 +40,13 @@ void computeElectronEfficiency( int option = 1) {
     //*************************************
     MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronTightSelectionDenominatorReco.cfg",
     			0,0,0,0,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/TightElectronSelectionEff/TagAndProbe_TightElectronSelection_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/TightElectronSelectionEffDenominatorReco/MC/",
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/TightElectronSelectionEffDenominatorReco/TagAndProbe_TightElectronSelectionEffDenominatorReco_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/TightElectronSelectionEffDenominatorReco/MC_2016_Rereco/",
     			"png",
     			true,
-    			0,
+    		0,
     			"",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight2016_ICHEP.root");
+    			"/afs/cern.ch/user/s/sixie/CMSSW_run2/src/RazorAnalyzer/data/PileupWeights/PileupReweight_2016_36p2ifb.root");
     
     //*************************************
     //Data : Do Fit
@@ -54,22 +54,22 @@ void computeElectronEfficiency( int option = 1) {
     MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronTightSelectionDenominatorReco.cfg",
     			//2,1,2,3,
     			2,1,2,2,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/TightElectronSelectionEff/TagAndProbe_TightElectronSelection_SingleElectron_2016_PRv2_GoodLumi.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/TightElectronSelectionEffDenominatorReco/Data+MC/",
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/TightElectronSelectionEffDenominatorReco/TagAndProbe_TightElectronSelectionEffDenominatorReco_SingleElectron_2016_Rereco_GoodLumiGolden.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/TightElectronSelectionEffDenominatorReco/Data_2016_Rereco/",
     			"png",
     			true,
     			0,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/TightElectronSelectionEff/TagAndProbe_TightElectronSelection_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight2016_ICHEP.root");
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/TightElectronSelectionEffDenominatorReco/TagAndProbe_TightElectronSelectionEffDenominatorReco_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    			"/afs/cern.ch/user/s/sixie/CMSSW_run2/src/RazorAnalyzer/data/PileupWeights/PileupReweight_2016_36p2ifb.root");
 
     //*************************************
     //Make Scale Factor Tables
     //*************************************
-    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/TightElectronSelectionEffDenominatorReco/Data+MC/eff.root",
-			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/TightElectronSelectionEffDenominatorReco/MC/eff.root",
-			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/TightElectronSelectionEffDenominatorReco/Data+MC/",
+    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/TightElectronSelectionEffDenominatorReco/Data_2016_Rereco/eff.root",
+			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/TightElectronSelectionEffDenominatorReco/MC_2016_Rereco/eff.root",
+			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/TightElectronSelectionEffDenominatorReco/Data_2016_Rereco/",
 			       "ScaleFactor_TightElectronSelectionEffDenominatorReco",
-			       "TightElectronSelectionEffDenominatorReco_2016ICHEP_Golden",
+			       "TightElectronSelectionEffDenominatorReco_2016_Rereco_Golden",
 			       20,200,0.5,1.15
 			       );    
   }
@@ -83,15 +83,15 @@ void computeElectronEfficiency( int option = 1) {
     //*************************************
     //Monte Carlo
     //*************************************
-    MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronVetoSelectionDenominatorReco.cfg",
-    			0,0,0,0,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/VetoElectronSelectionEff/TagAndProbe_VetoElectronSelectionEff_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/VetoElectronSelectionEffDenominatorReco/MC/",
-    			"png",
-    			true,
-    			0,
-    			"",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight2016_ICHEP.root");
+    // MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronVetoSelectionDenominatorReco.cfg",
+    // 			0,0,0,0,
+    // 			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/VetoElectronSelectionEffDenominatorReco/TagAndProbe_VetoElectronSelectionEffDenominatorReco_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/VetoElectronSelectionEffDenominatorReco/MC_2016_Rereco/",
+    // 			"png",
+    // 			true,
+    // 			0,
+    // 			"",
+    // 			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight_2016_36p2ifb.root");
     
     //*************************************
     //Data : Do Fit
@@ -99,22 +99,22 @@ void computeElectronEfficiency( int option = 1) {
     MakeEfficiencyPlots("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis//config/ElectronVetoSelectionDenominatorReco.cfg",
     			2,1,2,3,
     			//2,2,2,2,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/VetoElectronSelectionEff/TagAndProbe_VetoElectronSelectionEff_SingleElectron_2016_PRv2_GoodLumi.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/VetoElectronSelectionEffDenominatorReco/Data+MC/",
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/VetoElectronSelectionEffDenominatorReco/TagAndProbe_VetoElectronSelectionEffDenominatorReco_SingleElectron_2016_Rereco_GoodLumiGolden.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/VetoElectronSelectionEffDenominatorReco/Data_2016_Rereco/",
     			"png",
     			true,
     	 		0,
-    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe_ICHEP2016/VetoElectronSelectionEff/TagAndProbe_VetoElectronSelectionEff_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
-    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight2016_ICHEP.root");
+    			"/afs/cern.ch/user/s/sixie/eos/cms/store/group/phys_susy/razor/Run2Analysis/TagAndProbe/VetoElectronSelectionEffDenominatorReco/TagAndProbe_VetoElectronSelectionEffDenominatorReco_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root",
+    			"/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/RazorAnalyzer/data/PileupWeights/PileupReweight_2016_36p2ifb.root");
 
     //*************************************
     //Make Scale Factor Tables
     //*************************************
-    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/VetoElectronSelectionEffDenominatorReco/Data+MC/eff.root",
-  			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/VetoElectronSelectionEffDenominatorReco/MC/eff.root",
-  			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/outputJiajing/VetoElectronSelectionEffDenominatorReco/Data+MC/",
+    makeEfficiencyScaleFactors("/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/VetoElectronSelectionEffDenominatorReco/Data_2016_Rereco/eff.root",
+  			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/VetoElectronSelectionEffDenominatorReco/MC_2016_Rereco/eff.root",
+  			       "/afs/cern.ch/work/s/sixie/public/releases/run2/CMSSW_7_4_2/src/TagAndProbeAnalysis/output/VetoElectronSelectionEffDenominatorReco/Data_2016_Rereco/",
   			       "ScaleFactor_VetoElectronSelectionEffDenominatorReco",
-  			       "VetoElectronSelectionEffDenominatorReco_2016ICHEP_Golden",
+  			       "VetoElectronSelectionEffDenominatorReco_2016_Rereco_Golden",
   			       10,200,0.5,1.15
   			       );
     
